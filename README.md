@@ -2,7 +2,7 @@
 
 ## CRM System with Django + GraphQL
 
-A beginner-friendly backend project using Django, GraphQL (via Graphene), and django-filter to build a fully functional Customer Relationship Management (CRM) API.
+A backend project using Django, GraphQL (via Graphene), and django-filter that is a fully functional Customer Relationship Management (CRM) API.
 
 ---
 
@@ -83,7 +83,13 @@ cd alx-backend-graphql_crm
 ```bash
 python -m venv venv
 
-source venv/bin/activate    # On Windows: venv\Scriptsctivate
+#On Mac/Linux:
+
+source venv/bin/activate
+
+# On Windows:
+
+venv\Scriptsctivate
 ```
 
 1. **Install dependencies**
