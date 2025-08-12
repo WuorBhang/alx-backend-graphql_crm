@@ -269,22 +269,13 @@ mutation {
 
 ## 🔍 Filtering Options
 
-**allCustomers:** `nameIcontains`, `emailIcontains`, `createdAtGte`, `createdAtLte`, `phoneStartsWithPlusOne`  
+**allCustomers:** `nameIcontains`, `emailIcontains`, `createdAtGte`, `createdAtLte`, `phoneStartsWithPlusOne` 
+
 **allProducts:** `nameIcontains`, `priceGte`, `priceLte`, `stockGte`, `stockLte`  
+
 **allOrders:** `totalAmountGte`, `totalAmountLte`, `orderDateGte`, `orderDateLte`, `customerName`, `productName`, `hasProductId`  
 
 ✅ All filters are case-insensitive.
-
----
-
-## 🧹 Best Practices Used
-
-✅ Modular Schema Design  
-✅ Input Validation & Error Handling  
-✅ Partial Success in Bulk Operations  
-✅ Reusable Filter Classes  
-✅ Clean, Readable Code for Beginners  
-✅ CSRF Exemption for GraphQL View (dev only)  
 
 ---
 
@@ -294,19 +285,6 @@ mutation {
 - Never disable CSRF in production without proper authentication.
 - Use `graphene-django-optimizer` to solve N+1 queries.
 - Consider adding authentication for production use.
-
----
-
-## 🎓 Learning Outcomes
-
-After completing this project, you will understand:
-
-- How GraphQL differs from REST
-- How to define schemas and resolvers
-- How to perform queries & mutations
-- How to validate input and handle errors
-- How to filter data with `django-filter`
-- How to integrate Django models with GraphQL
 
 ---
 
