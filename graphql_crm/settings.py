@@ -75,6 +75,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Graphene Settings
 GRAPHENE = {
-    'SCHEMA': 'graphql_crm.schema.schema',
-    'MIDDLEWARE': [],
+    'SCHEMA': 'graphql_crm.schema.schema'
+    # 'MIDDLEWARE': [],
 }
