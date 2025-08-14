@@ -41,4 +41,3 @@ class OrderFilter(django_filters.FilterSet):
     class Meta:
         model = Order
         fields = ['total_amount', 'order_date', 'customer__name', 'products__name']
-        

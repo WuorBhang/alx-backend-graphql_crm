@@ -189,4 +189,3 @@ class Query(graphene.ObjectType):
 
     def resolve_order(self, info, id):
         return Order.objects.get(pk=id)
-    
