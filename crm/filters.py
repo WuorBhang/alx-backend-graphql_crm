@@ -1,36 +1,33 @@
-# crm/filters.py
-
 import django_filters
 from .models import Customer, Product, Order
 
 class CustomerFilter(django_filters.FilterSet):
-    name_icontains = django_filters.CharFilter(field_name='name', lookup_expr='icontains')
-    email_icontains = django_filters.CharFilter(field_name='email', lookup_expr='icontains')
+    name = django_filters.CharFilter(lookup_expr='icontains')
+    email = django_filters.CharFilter(lookup_expr='icontains')
+    phone = django_filters.CharFilter(lookup_expr='icontains')
     created_at_gte = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
     created_at_lte = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
-    phone_starts_with_plus_one = django_filters.BooleanFilter(method='filter_phone_plus_one')
 
     class Meta:
         model = Customer
-        fields = []
-
-    def filter_phone_plus_one(self, queryset, name, value):
-        if value:
-            return queryset.filter(phone__startswith='+1')
-        return queryset
-
+        fields = ['name', 'email', 'phone', 'created_at']
 
 class ProductFilter(django_filters.FilterSet):
-    name_icontains = django_filters.CharFilter(field_name='name', lookup_expr='icontains')
+    name = django_filters.CharFilter(lookup_expr='icontains')
     price_gte = django_filters.NumberFilter(field_name='price', lookup_expr='gte')
     price_lte = django_filters.NumberFilter(field_name='price', lookup_expr='lte')
     stock_gte = django_filters.NumberFilter(field_name='stock', lookup_expr='gte')
     stock_lte = django_filters.NumberFilter(field_name='stock', lookup_expr='lte')
+    low_stock = django_filters.BooleanFilter(method='filter_low_stock')
 
     class Meta:
         model = Product
-        fields = []
+        fields = ['name', 'price', 'stock']
 
+    def filter_low_stock(self, queryset, name, value):
+        if value:
+            return queryset.filter(stock__lt=10)
+        return queryset
 
 class OrderFilter(django_filters.FilterSet):
     total_amount_gte = django_filters.NumberFilter(field_name='total_amount', lookup_expr='gte')
@@ -39,12 +36,9 @@ class OrderFilter(django_filters.FilterSet):
     order_date_lte = django_filters.DateTimeFilter(field_name='order_date', lookup_expr='lte')
     customer_name = django_filters.CharFilter(field_name='customer__name', lookup_expr='icontains')
     product_name = django_filters.CharFilter(field_name='products__name', lookup_expr='icontains')
-    has_product_id = django_filters.NumberFilter(method='filter_by_product_id')
+    has_product = django_filters.NumberFilter(field_name='products__id', lookup_expr='exact')
 
     class Meta:
         model = Order
-        fields = []
-
-    def filter_by_product_id(self, queryset, name, value):
-        return queryset.filter(products__id=value)
-    
+        fields = ['total_amount', 'order_date', 'customer__name', 'products__name']
+        

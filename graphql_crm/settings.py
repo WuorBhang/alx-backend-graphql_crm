@@ -1,10 +1,9 @@
-# graphql_crm/settings.py
-
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-your-secret-key-here'  # Change in production
+SECRET_KEY = '!+$hr*^9_%i5s@cx*dlxhu*r^q4x4+q2ukl6=fyq3g!h8$elrx'
 
 DEBUG = True
 
@@ -17,12 +16,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third-party
     'graphene_django',
     'django_filters',
-
-    # Local apps
     'crm',
 ]
 
@@ -63,18 +58,30 @@ DATABASES = {
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = []
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Graphene Settings
 GRAPHENE = {
-    'SCHEMA': 'graphql_crm.schema.schema',
-    'MIDDLEWARE': [],
+    "SCHEMA": "graphql_crm.schema.schema"
 }
