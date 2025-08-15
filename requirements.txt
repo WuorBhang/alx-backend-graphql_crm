@@ -1,3 +1,9 @@
-Django==4.2
-graphene-django==3.1.5
-django-filter==23.3
+Django==5.2.5
+django-debug-toolbar==6.0.0
+django-environ==0.12.0
+django-filter==25.1
+flake8==7.3.0
+graphene==3.4.3
+graphene-django==3.2.3
+graphql-core==3.2.6
+graphql-relay==3.2.0
