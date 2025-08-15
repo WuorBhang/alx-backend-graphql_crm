@@ -85,7 +85,7 @@ class Product(BaseModel):
         max_digits=10,
         decimal_places=2,
         validators=[MinValueValidator(0.01)],
-        help_text="Product price",
+        help_text="Product price (positive decimal)"
     )
     stock = models.PositiveIntegerField(default=0, help_text="Available stock quantity")
 

@@ -44,6 +44,8 @@ class ProductType(DjangoObjectType):
 class OrderType(DjangoObjectType):
     """GraphQL type for Order model."""
 
+    products = graphene.List(ProductType)
+
     class Meta:
         model = Order
         interfaces = (graphene.relay.Node,)
@@ -57,6 +59,9 @@ class OrderType(DjangoObjectType):
             "updated_at",
         )
         filterset_class = OrderFilter
+
+    def resolve_products(self, info):
+        return self.products.all()
 
 
 # Input Types
@@ -72,7 +77,7 @@ class ProductInput(graphene.InputObjectType):
     """Input type for creating a product."""
 
     name = graphene.String(required=True)
-    price = graphene.Decimal(required=True)
+    price = graphene.Float(required=True)  # Accepts float for price
     stock = graphene.Int(required=False, default_value=0)
 
 
@@ -277,7 +282,9 @@ class CreateProduct(graphene.Mutation):
 
             # Create the product
             product = Product.objects.create(
-                name=input.name, price=input.price, stock=input.stock
+                name=input.name,
+                price=Decimal(str(input.price)),  # Convert float to Decimal
+                stock=input.stock
             )
 
             return CreateProduct(
@@ -394,7 +401,7 @@ class Query(graphene.ObjectType):
         CustomerType,
         description="Get all customers with filtering and ordering",
         filter=graphene.Argument(CustomerFilterInput),
-        order_by=graphene.String(),  # e.g. "name" or "-created_at"
+        order_by=graphene.String(),
     )
     customer = graphene.Field(
         CustomerType, id=graphene.ID(required=True), description="Get a customer by ID"
@@ -405,7 +412,7 @@ class Query(graphene.ObjectType):
         ProductType,
         description="Get all products with filtering and ordering",
         filter=graphene.Argument(ProductFilterInput),
-        order_by=graphene.String(),  # e.g. "stock" or "-price"
+        order_by=graphene.String(),
     )
     product = graphene.Field(
         ProductType, id=graphene.ID(required=True), description="Get a product by ID"
@@ -416,7 +423,7 @@ class Query(graphene.ObjectType):
         OrderType,
         description="Get all orders with filtering and ordering",
         filter=graphene.Argument(OrderFilterInput),
-        order_by=graphene.String(),  # e.g. "order_date" or "-total_amount"
+        order_by=graphene.String(),
     )
     order = graphene.Field(
         OrderType, id=graphene.ID(required=True), description="Get an order by ID"
@@ -433,10 +440,6 @@ class Query(graphene.ObjectType):
             str: Greeting message
         """
         return "Hello, GraphQL!"
-
-    # def resolve_all_customers(self, info):
-    #     """Get all customers."""
-    #     return Customer.objects.all()
 
     def resolve_all_customers(self, info, filter=None, order_by=None):
         qs = Customer.objects.all()
@@ -469,10 +472,6 @@ class Query(graphene.ObjectType):
         except Customer.DoesNotExist:
             return None
 
-    # def resolve_all_products(self, info):
-    #     """Get all products."""
-    #     return Product.objects.all()
-
     def resolve_all_products(self, info, filter=None, order_by=None):
         qs = Product.objects.all()
         if filter:
@@ -501,12 +500,6 @@ class Query(graphene.ObjectType):
             return Product.objects.get(id=id)
         except Product.DoesNotExist:
             return None
-
-    # def resolve_all_orders(self, info):
-    #     """Get all orders with related data."""
-    #     return (
-    #         Order.objects.select_related("customer").prefetch_related("products").all()
-    #     )
 
     def resolve_all_orders(self, info, filter=None, order_by=None):
         qs = Order.objects.select_related("customer").prefetch_related("products").all()
