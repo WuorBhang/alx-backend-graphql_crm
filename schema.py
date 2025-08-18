@@ -1,11 +1,3 @@
-# alx_backend_graphql_crm/schema.py
-import graphene
-from crm.schema import Query as CRMQuery, Mutation as CRMMutation
+# schema.py (root) - re-export the main schema
+from graphql_crm.schema import schema
 
-class Query(CRMQuery, graphene.ObjectType):
-    pass
-
-class Mutation(CRMMutation, graphene.ObjectType):
-    pass
-
-schema = graphene.Schema(query=Query, mutation=Mutation)
