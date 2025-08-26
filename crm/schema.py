@@ -106,11 +106,30 @@ class CreateOrder(graphene.Mutation):
         order.save()
 
         return CreateOrder(order=order)
+class UpdateLowStockProducts(graphene.Mutation):
+    class Arguments:
+        increment_by = graphene.Int(default_value=10)
+
+    products = graphene.List(ProductType)
+    message = graphene.String()
+
+    def mutate(self, info, increment_by=10):
+        if increment_by <= 0:
+            raise ValidationError("increment_by must be positive.")
+        low_stock_qs = Product.objects.filter(stock__lt=10)
+        updated = []
+        for product in low_stock_qs:
+            product.stock = product.stock + increment_by
+            product.save()
+            updated.append(product)
+        msg = f"Updated {len(updated)} low-stock product(s)."
+        return UpdateLowStockProducts(products=updated, message=msg)
 class Mutation(graphene.ObjectType):
     create_customer = CreateCustomer.Field()
     bulk_create_customers = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
+    update_low_stock_products = UpdateLowStockProducts.Field()
 
 class Query(graphene.ObjectType):
     customer = graphene.relay.Node.Field(CustomerType)
