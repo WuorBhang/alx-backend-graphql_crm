@@ -3,7 +3,6 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from crm.models import Customer, Product, Order
 from crm.filters import CustomerFilter, ProductFilter, OrderFilter
-from .models import Customer, Product, Order
 from django.core.exceptions import ValidationError
 class CustomerType(DjangoObjectType):
     class Meta:
